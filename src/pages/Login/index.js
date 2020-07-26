@@ -1,10 +1,16 @@
 import React, { useState }  from 'react';
 import { View, Image, TextInput, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import styles from './styles';
 import logoImg from '../../assets/sofit-logo.png';
 
 export default function Login() {
+  const navigation = useNavigation();
+
+  function Logon() {
+    navigation.navigate('Home');
+ }
 
   return (
     <KeyboardAvoidingView
@@ -24,7 +30,7 @@ export default function Login() {
           placeholder="E-mail"
         />
 
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => Logon()}>
           <Text style={styles.textButton}>Login</Text>
         </TouchableOpacity>
       </View>
