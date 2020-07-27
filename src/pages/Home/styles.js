@@ -14,9 +14,9 @@ export default StyleSheet.create({
 		alignItems: 'center'
 	},
 
-	headerText: {
+	totalText: {
 		fontSize: 15,
-		color: '#13131a',
+		color: '#FFF',
 	},
 
     headerTextBold: {
@@ -26,39 +26,32 @@ export default StyleSheet.create({
 	title: {
 		fontSize: 30,
 		marginBottom: 16,
-		marginTop: 48,
 		color: '#9acd32',
 		fontWeight: 'bold',
 	},
 
-	description:{
-		fontSize: 16,
-		lineHeight: 24,
-		color: '#9acd32'
-	},
-
-	incidentList:{
+	expenseList:{
 		marginTop:32,
 	},
 
-	incident: {
+	expense: {
 		padding:24,
 		borderRadius:8,
-		backgroundColor: '#FFF',
+		backgroundColor: '#222222',
 		marginBottom: 16,
 	},
 
-	incidentProperty: {
+	expenseProperty: {
 		fontSize: 14,
-		color: '#41414d',
+		color: '#737380',
 		fontWeight: 'bold'
 	},
 
-	incidentValue: {
+	expenseValue: {
 		marginTop: 8,
 		fontSize:15,
 		marginBottom: 24,
-		color: '#737380'
+		color: '#fff'
 	},
 
 	detailsButton: {
@@ -68,9 +61,29 @@ export default StyleSheet.create({
 	},
 
 	detailsButtonText: {
-		color: '#e02041',
+		color: '#9acd32',
 		fontSize: 15,
 		fontWeight:'bold'
-	},
+  },
+
+  addExpense: {
+    backgroundColor: '#222222',
+    borderRadius: 8,
+    height: 55,
+    width: '40%',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+
+  addExpenseText: {
+    marginLeft: 6,
+    marginRight: 6,
+    color: '#9acd32',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 
 });

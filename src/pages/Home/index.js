@@ -1,41 +1,40 @@
-
-import React  from 'react';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { View, FlatList, Image, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 // import logoImg from '../../assets/logo.png'
-import styles from './styles'
+import styles from './styles';
 
 export default function Home() {
-  // const [incident, setIncident] = useState([]);
+  // const [expense, setExpense] = useState([]);
   // const [total, setTotal] = useState(0);
   // const [page, setPage] = useState(1);
   // const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
-  // function navigateToDetail(incident) {
-  //   navigation.navigate('Detail', { incident });
+  // function navigateToDetail(expense) {
+  //   navigation.navigate('Detail', { expense });
   // }
 
-  // async function loadIncidents() {
+  // async function loadExpenses() {
   //   if (loading) {
   //     return;
   //   }
 
-  //   if (total > 0 && incident.length == total) {
+  //   if (total > 0 && expense.length == total) {
   //     return;
   //   }
 
   //   setLoading(true);
 
-  //   const response = await api.get('incident', {
+  //   const response = await api.get('expense', {
   //     params: { page }
   //   });
 
-  //   //copia todos os valores q já tem nos incidentes (...) + retorno da requisição
-  //   setIncident([...incident, ...response.data]);
+  //   //copia todos os valores q já tem nas despesas (...) + retorno da requisição
+  //   setExpense([...expense, ...response.data]);
 
   //   setTotal(response.headers['x-total-count'])
   //   setPage(page + 1);
@@ -43,54 +42,57 @@ export default function Home() {
   // }
 
   // useEffect(() => {
-  //   loadIncidents();
+  //   loadExpenses();
   // }, []);
+
+  function navigateToNewExpense() {
+    navigation.navigate('NewExpense');
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        {/* <Image source={logoImg}></Image> */}
-        <Text style={styles.headerText}>
-          Total de <Text style={styles.headerTextBold}>20 despesas</Text>.
-        </Text>
+        <Text style={styles.title}>Bem-vindo!</Text>
+        <TouchableOpacity style={styles.addExpense} onPress={navigateToNewExpense}>
+          <Icon name="plus" size={18} color="#9acd32" />
+          <Text style={styles.addExpenseText}>Despesa</Text>
+        </TouchableOpacity>
       </View>
-      <Text style={styles.title}>Bem-vindo</Text>
-      <Text style={styles.description}>Essas são as suas despesas ... ;)</Text>
-
+      <Text style={styles.totalText}>
+        Total de <Text style={styles.headerTextBold}>20 despesas</Text>.
+      </Text>
       {/* <FlatList
-        data={incident}
-        style={styles.incidentList}
-        keyExtractor={incident => String(incident.id)}
+        data={expense}
+        style={styles.expenseList}
+        keyExtractor={expense => String(expense.id)}
         showsVerticalScrollIndicator={false}
-        onEndReached={loadIncidents}
+        onEndReached={loadExpenses}
         onEndReachedThreshold={0.2} //indica quantos por cento está do fim da pagina (de 0 a 1)
-        renderItem={({ item: incident }) => ( */}
-          <View style={styles.incident}>
-            <Text style={styles.incidentProperty}>ITEM:</Text>
-            <Text style={styles.incidentValue}>Netflix</Text>
+        renderItem={({ item: expense }) => ( */}
+      <View style={styles.expense}>
+        <Text style={styles.expenseProperty}>ITEM:</Text>
+        <Text style={styles.expenseValue}>Netflix</Text>
 
-            <Text style={styles.incidentProperty}>VALOR:</Text>
-            <Text style={styles.incidentValue}>
-              {Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-              }).format(20)}
-            </Text>
+        <Text style={styles.expenseProperty}>VALOR:</Text>
+        <Text style={styles.expenseValue}>
+          {Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+          }).format(20)}
+        </Text>
 
-            <Text style={styles.incidentProperty}>DATA:</Text>
-            <Text style={styles.incidentValue}>17/08/2020</Text>
+        <Text style={styles.expenseProperty}>DATA:</Text>
+        <Text style={styles.expenseValue}>17/08/2020</Text>
 
-            <Text style={styles.incidentProperty}>OBSERVAÇÕES:</Text>
-            <Text style={styles.incidentValue}>.........</Text>
+        <Text style={styles.expenseProperty}>OBSERVAÇÕES:</Text>
+        <Text style={styles.expenseValue}>.........</Text>
 
-            <TouchableOpacity
-              style={styles.detailsButton}
-            >
-              <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
-              {/* <Icon name="person-add" size={22} color="#9acd32" /> */}
-            </TouchableOpacity>
-          </View>
-        {/* )}
+        <TouchableOpacity style={styles.detailsButton}>
+          <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
+          <Icon name="arrow-right" size={18} color="#9acd32" />
+        </TouchableOpacity>
+      </View>
+      {/* )}
       /> */}
     </View>
   );
