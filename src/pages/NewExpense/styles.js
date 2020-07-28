@@ -22,7 +22,7 @@ export default StyleSheet.create({
     padding: 24,
     borderRadius: 8,
     backgroundColor: '#222222',
-    marginBottom: 160,
+    marginBottom: 106,
     marginTop: 20
   },
 
@@ -45,6 +45,16 @@ export default StyleSheet.create({
     marginTop: 8,
     fontSize: 15,
     color: '#737380',
+  },
+
+  date: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  calendarButton: {
+    marginEnd: '35%'
   },
 
   createButton: {

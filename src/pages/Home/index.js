@@ -3,7 +3,6 @@ import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
-// import logoImg from '../../assets/logo.png'
 import styles from './styles';
 
 export default function Home() {
@@ -14,9 +13,13 @@ export default function Home() {
 
   const navigation = useNavigation();
 
-  // function navigateToDetail(expense) {
-  //   navigation.navigate('Detail', { expense });
-  // }
+  function navigateToNewExpense() {
+    navigation.navigate('NewExpense');
+  }
+
+  function navigateToEditDetail() {
+    navigation.navigate('EditDetail');
+  }
 
   // async function loadExpenses() {
   //   if (loading) {
@@ -45,10 +48,6 @@ export default function Home() {
   //   loadExpenses();
   // }, []);
 
-  function navigateToNewExpense() {
-    navigation.navigate('NewExpense');
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -70,10 +69,10 @@ export default function Home() {
         onEndReachedThreshold={0.2} //indica quantos por cento está do fim da pagina (de 0 a 1)
         renderItem={({ item: expense }) => ( */}
       <View style={styles.expense}>
-        <Text style={styles.expenseProperty}>ITEM:</Text>
+        <Text style={styles.expenseProperty}>ITEM</Text>
         <Text style={styles.expenseValue}>Netflix</Text>
 
-        <Text style={styles.expenseProperty}>VALOR:</Text>
+        <Text style={styles.expenseProperty}>VALOR</Text>
         <Text style={styles.expenseValue}>
           {Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -81,13 +80,13 @@ export default function Home() {
           }).format(20)}
         </Text>
 
-        <Text style={styles.expenseProperty}>DATA:</Text>
+        <Text style={styles.expenseProperty}>DATA</Text>
         <Text style={styles.expenseValue}>17/08/2020</Text>
 
-        <Text style={styles.expenseProperty}>OBSERVAÇÕES:</Text>
+        <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
         <Text style={styles.expenseValue}>.........</Text>
 
-        <TouchableOpacity style={styles.detailsButton}>
+        <TouchableOpacity style={styles.detailsButton} onPress={navigateToEditDetail}>
           <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
           <Icon name="arrow-right" size={18} color="#9acd32" />
         </TouchableOpacity>

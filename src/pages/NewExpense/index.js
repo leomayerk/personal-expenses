@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -13,19 +13,24 @@ import {
   SafeAreaView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from "date-fns";
 
 import styles from './styles';
 
 export default function NewExpense() {
   const navigation = useNavigation(null);
 
-  // const assignDate = (event, selectedDate) => {
-  //   const currentDate = selectedDate || date;
-  //   setDate(currentDate);
-  //   console.log(currentDate);
-  // }
+  const [datePressed, setDatePressed] = useState(false);
+  const [date, setDate] = useState(new Date());
 
-  const date = new Date();
+  const formattedDate = format(date, "dd/MM/yyyy");
+
+  const assignDate = (event, selectedDate) => {
+    setDatePressed(false)
+    const currentDate = selectedDate || date;
+    setDate(currentDate);
+    console.log(currentDate);
+  }
 
   function navigateToBack() {
     navigation.goBack();
@@ -66,19 +71,25 @@ export default function NewExpense() {
                 placeholderTextColor={'#737380'}></TextInput>
 
               <Text style={styles.expenseProperty}>DATA</Text>
-              <DateTimePicker
-                display="default"
-                value={date}
-                mode="date"
-                timeZoneOffsetInMinutes={0}
-              />
-              {/* <DateTimePicker
-                display="default"
-                value={date}
-                mode="date"
-                timeZoneOffsetInMinutes={0}
-                onChange={assignDate}
-              /> */}
+              <View style={styles.date}>
+                <TextInput
+                  style={styles.expenseValue}
+                  placeholder="Selecione uma data"
+                  placeholderTextColor={'#737380'}>{formattedDate}</TextInput>
+                <TouchableOpacity style={styles.calendarButton} onPress={datePressed => setDatePressed(true)}>
+                  <Icon name="calendar-plus-o" size={20} color="#fff" />
+                </TouchableOpacity>
+
+                {datePressed && (
+                  <DateTimePicker
+                    display="default"
+                    value={date}
+                    mode="date"
+                    timeZoneOffsetInMinutes={0}
+                    onChange={assignDate}
+                  />
+                )}
+              </View>
 
               <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
               <TextInput
