@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
 
 import styles from './styles';
+import { allExpenses } from '../../store/fetchActions'
 
 export default function Home() {
   // const [expense, setExpense] = useState([]);
@@ -11,7 +13,14 @@ export default function Home() {
   // const [page, setPage] = useState(1);
   // const [loading, setLoading] = useState(false);
 
+  const expenses = useSelector((state) => state.expenses);
+  const dispatch = useDispatch();
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    dispatch(allExpenses())
+  }, [expenses, dispatch]);
 
   function navigateToNewExpense() {
     navigation.navigate('NewExpense');
@@ -44,15 +53,13 @@ export default function Home() {
   //   setLoading(false);
   // }
 
-  // useEffect(() => {
-  //   loadExpenses();
-  // }, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Bem-vindo!</Text>
-        <TouchableOpacity style={styles.addExpense} onPress={navigateToNewExpense}>
+        <TouchableOpacity
+          style={styles.addExpense}
+          onPress={navigateToNewExpense}>
           <Icon name="plus" size={18} color="#9acd32" />
           <Text style={styles.addExpenseText}>Despesa</Text>
         </TouchableOpacity>
@@ -60,39 +67,41 @@ export default function Home() {
       <Text style={styles.totalText}>
         Total de <Text style={styles.headerTextBold}>20 despesas</Text>.
       </Text>
-      {/* <FlatList
-        data={expense}
+      <FlatList
+        data={expenses}
         style={styles.expenseList}
-        keyExtractor={expense => String(expense.id)}
+        keyExtractor={(expense) => String(expense._id)}
         showsVerticalScrollIndicator={false}
-        onEndReached={loadExpenses}
+        //onEndReached={loadExpenses}
         onEndReachedThreshold={0.2} //indica quantos por cento está do fim da pagina (de 0 a 1)
-        renderItem={({ item: expense }) => ( */}
-      <View style={styles.expense}>
-        <Text style={styles.expenseProperty}>ITEM</Text>
-        <Text style={styles.expenseValue}>Netflix</Text>
+        renderItem={({item: expense}) => (
+          <View style={styles.expense}>
+            <Text style={styles.expenseProperty}>ITEM</Text>
+            <Text style={styles.expenseValue}>Netflix</Text>
 
-        <Text style={styles.expenseProperty}>VALOR</Text>
-        <Text style={styles.expenseValue}>
-          {Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-          }).format(20)}
-        </Text>
+            <Text style={styles.expenseProperty}>VALOR</Text>
+            <Text style={styles.expenseValue}>
+              {Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              }).format(20)}
+            </Text>
 
-        <Text style={styles.expenseProperty}>DATA</Text>
-        <Text style={styles.expenseValue}>17/08/2020</Text>
+            <Text style={styles.expenseProperty}>DATA</Text>
+            <Text style={styles.expenseValue}>17/08/2020</Text>
 
-        <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
-        <Text style={styles.expenseValue}>.........</Text>
+            <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
+            <Text style={styles.expenseValue}>.........</Text>
 
-        <TouchableOpacity style={styles.detailsButton} onPress={navigateToEditDetail}>
-          <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
-          <Icon name="arrow-right" size={18} color="#9acd32" />
-        </TouchableOpacity>
-      </View>
-      {/* )}
-      /> */}
+            <TouchableOpacity
+              style={styles.detailsButton}
+              onPress={navigateToEditDetail}>
+              <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
+              <Icon name="arrow-right" size={18} color="#9acd32" />
+            </TouchableOpacity>
+          </View>
+        )}
+      />
     </View>
   );
 }
