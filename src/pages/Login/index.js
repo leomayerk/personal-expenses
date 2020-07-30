@@ -13,21 +13,30 @@ import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
 import logoImg from '../../assets/sofit-logo.png';
 import {authLogin} from '../../store/fetchActions';
+import {logout, login} from '../../store/ducks/auth';
 
 export default function Login() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.auth.token);
+  const token = useSelector((state) => state.auth);
   const [email, setEmail] = useState('');
 
-  async function Logon() {
-    await dispatch(authLogin({email}));
-    console.log(token);
-    if (token != undefined) {
-      setEmail('');
+  function Logon() {
+    dispatch(authLogin({email}));
+  }
+
+  useEffect(() => {
+    if (token != undefined && token != '') {
+      this.textInput.clear();
       navigation.navigate('Home');
     }
-  }
+
+    return () => {
+      this.textInput.clear()
+      dispatch(login(''));
+      console.log(token);
+    };
+  }, [token]);
 
   return (
     <KeyboardAvoidingView
@@ -46,6 +55,8 @@ export default function Login() {
           style={styles.input}
           placeholder="E-mail"
           onChangeText={(email) => setEmail(email)}
+          ref={input => { this.textInput = input }}
+          // ref={(input) => setEmail(input)}
         />
 
         <TouchableOpacity style={styles.button} onPress={() => Logon()}>

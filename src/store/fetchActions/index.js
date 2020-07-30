@@ -17,14 +17,18 @@ export const authLogin = (email) => {
   return (dispatch) => {
     api
       .get(`/start/${email.email}`)
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.token) {
-          dispatch(login(res.data));
-          showMessage({
-            message: `Bem-vindo ${email.email}!`,
-            description: 'Desfrute do seu app de despesas ;)',
-            type: 'success',
-          });
+          try {
+            await dispatch(login(res.data.token));
+            showMessage({
+              message: `Bem-vindo ${email.email}!`,
+              description: 'Desfrute do seu app de despesas ;)',
+              type: 'success',
+            });
+          } catch (error) {
+            console.log(error);
+          }
         }
       })
       .catch((error) => {
