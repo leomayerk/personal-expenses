@@ -33,7 +33,7 @@ export default function Login() {
 
     return () => {
       this.textInput.clear()
-      dispatch(login(''));
+      setEmail('');
       console.log(token);
     };
   }, [token]);
