@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Alert,
@@ -11,29 +11,114 @@ import {
   SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from "date-fns";
+import {format} from 'date-fns';
+import {useDispatch} from 'react-redux';
 
+import {deleteExpense, editExpense} from '../../store/fetchActions';
 import styles from './styles';
 
 export default function EditDetail() {
   const navigation = useNavigation(null);
+  const route = useRoute();
+  const expense = route.params.expense;
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth);
 
+  const [item, setItem] = useState(expense.item);
+  const [value, setValue] = useState(expense.value);
+  const [date, setDate] = useState(expenseDate);
+  const [info, setInfo] = useState(expense.additionalInfo);
   const [datePressed, setDatePressed] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [updated, setUpdated] = useState(false);
 
-  const formattedDate = format(date, "dd/MM/yyyy");
+  const formattedDate = format(date, 'dd/MM/yyyy');
+  const expenseDate = new Date(expense.date);
 
   const assignDate = (event, selectedDate) => {
-    setDatePressed(false)
+    setDatePressed(false);
     const currentDate = selectedDate || date;
     setDate(currentDate);
     console.log(currentDate);
-  }
+  };
 
   function navigateToBack() {
     navigation.goBack();
+  }
+
+  useEffect(() => {
+    if (
+      expense.date !== date ||
+      expense.value !== value ||
+      expense.item !== item ||
+      expense.additionalInfo !== info
+    ) {
+      setUpdated(true);
+    }
+  }, [item, value, date, info]);
+
+  function confirmDelete(id) {
+    Alert.alert(
+      'Deseja excluir essa despesa?',
+      'Se confirmar, não conseguirá acessar mais essa despesa',
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'Confirmar',
+          onPress: () => delExpense(id),
+        },
+      ],
+      {cancelable: false},
+    );
+  }
+
+  function confirmUpdate(id) {
+    if (item == '' || date == '' || value == '') {
+      Alert.alert(
+        'Ops!',
+        'Item, Data e Valor são campos obrigatórios.',
+        [
+          {
+            text: 'Ok, vou informar esses campos!',
+            onPress: () => console.log('Ok pressed'),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      Alert.alert(
+        'Deseja salvar suas alterações?',
+        'Se confirmar, suas alterações serão efetivadas.',
+        [
+          {
+            text: 'Cancelar',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'Confirmar',
+            onPress: () => updExpense(id, item, date, value, info),
+          },
+        ],
+        {cancelable: false},
+      );
+    }
+  }
+
+  async function delExpense(id) {
+    await dispatch(deleteExpense(id, token));
+    navigation.navigate('Home');
+  }
+
+  async function updExpense(id, item, date, value, info) {
+    await dispatch(editExpense(id, date, item, value, info, token));
+    navigation.navigate('Home');
   }
 
   return (
@@ -47,9 +132,16 @@ export default function EditDetail() {
         <View style={styles.horizontalPadding}>
           <StatusBar barStyle="dark-content" />
           <View style={styles.header}>
-            <TouchableOpacity onPress={navigateToBack}>
-              <Icon name="arrow-left" size={22} color="#9acd32" />
-            </TouchableOpacity>
+            {!updated && (
+              <TouchableOpacity onPress={navigateToBack}>
+                <Icon name="arrow-left" size={22} color="#9acd32" />
+              </TouchableOpacity>
+            )}
+            {updated && (
+              <TouchableOpacity onPress={() => confirmUpdate(expense._id)}>
+                <Icon name="floppy-o" size={22} color="#9acd32" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -70,21 +162,32 @@ export default function EditDetail() {
               <TextInput
                 style={styles.expenseValue}
                 placeholder="Item"
-                placeholderTextColor={'#737380'}></TextInput>
+                placeholderTextColor={'#737380'}
+                onChangeText={(item) => setItem(item)}>
+                {expense.item}
+              </TextInput>
 
               <Text style={styles.expenseProperty}>VALOR</Text>
               <TextInput
                 style={styles.expenseValue}
                 placeholder="Valor"
-                placeholderTextColor={'#737380'}></TextInput>
+                placeholderTextColor={'#737380'}
+                onChangeText={(value) => setValue(value)}>
+                {expense.value}
+              </TextInput>
 
               <Text style={styles.expenseProperty}>DATA</Text>
               <View style={styles.date}>
                 <TextInput
                   style={styles.expenseValue}
                   placeholder="Selecione uma data"
-                  placeholderTextColor={'#737380'}>{formattedDate}</TextInput>
-                <TouchableOpacity style={styles.calendarButton} onPress={datePressed => setDatePressed(true)}>
+                  placeholderTextColor={'#737380'}
+                  onChangeText={(date) => setDate(date)}>
+                  {formattedDate}
+                </TextInput>
+                <TouchableOpacity
+                  style={styles.calendarButton}
+                  onPress={setDatePressed(true)}>
                   <Icon name="calendar-plus-o" size={20} color="#fff" />
                 </TouchableOpacity>
 
@@ -97,7 +200,6 @@ export default function EditDetail() {
                     onChange={assignDate}
                   />
                 )}
-
               </View>
 
               <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
@@ -105,10 +207,15 @@ export default function EditDetail() {
                 style={styles.expenseValue}
                 placeholder="Informação Adicional"
                 multiline={true}
-                placeholderTextColor={'#737380'}></TextInput>
+                placeholderTextColor={'#737380'}
+                onChangeText={(info) => setInfo(info)}>
+                {expense.additionalInfo}
+              </TextInput>
             </View>
           </View>
-          <TouchableOpacity style={styles.deleteButton}>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={() => confirmDelete(expense._id)}>
             <Icon name="trash" size={20} color="#222222" />
             <Text style={styles.deleteText}>Excluir</Text>
           </TouchableOpacity>

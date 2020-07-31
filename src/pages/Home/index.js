@@ -1,57 +1,52 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, FlatList, Text, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 
 import styles from './styles';
-import { allExpenses } from '../../store/fetchActions'
+import {allExpenses} from '../../store/fetchActions';
 
 export default function Home() {
   // const [expense, setExpense] = useState([]);
-  // const [total, setTotal] = useState(0);
-  // const [page, setPage] = useState(1);
-  // const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const expenses = useSelector((state) => state.expenses);
+  const token = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    dispatch(allExpenses())
+    const getExpenses = navigation.addListener('focus', () => {
+			loadExpenses();
+		});
+
+		return getExpenses;
   }, [expenses, dispatch]);
 
   function navigateToNewExpense() {
     navigation.navigate('NewExpense');
   }
 
-  function navigateToEditDetail() {
-    navigation.navigate('EditDetail');
+  function navigateToEditDetail(expense) {
+    navigation.navigate('EditDetail', {expense});
   }
 
-  // async function loadExpenses() {
-  //   if (loading) {
-  //     return;
-  //   }
+  async function loadExpenses() {
+    if (loading) {
+      return;
+    }
 
-  //   if (total > 0 && expense.length == total) {
-  //     return;
-  //   }
+    setLoading(true);
 
-  //   setLoading(true);
+    dispatch(allExpenses(page, token));
 
-  //   const response = await api.get('expense', {
-  //     params: { page }
-  //   });
-
-  //   //copia todos os valores q já tem nas despesas (...) + retorno da requisição
-  //   setExpense([...expense, ...response.data]);
-
-  //   setTotal(response.headers['x-total-count'])
-  //   setPage(page + 1);
-  //   setLoading(false);
-  // }
+    // setExpense([...expense, ...response.data]);
+    setPage(page + 1);
+    setLoading(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -64,9 +59,7 @@ export default function Home() {
           <Text style={styles.addExpenseText}>Despesa</Text>
         </TouchableOpacity>
       </View>
-      <Text style={styles.totalText}>
-        Total de <Text style={styles.headerTextBold}>20 despesas</Text>.
-      </Text>
+
       <FlatList
         data={expenses}
         style={styles.expenseList}
@@ -77,25 +70,25 @@ export default function Home() {
         renderItem={({item: expense}) => (
           <View style={styles.expense}>
             <Text style={styles.expenseProperty}>ITEM</Text>
-            <Text style={styles.expenseValue}>Netflix</Text>
+            <Text style={styles.expenseValue}>{expense.item}</Text>
 
             <Text style={styles.expenseProperty}>VALOR</Text>
             <Text style={styles.expenseValue}>
               {Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
-              }).format(20)}
+              }).format(expense.value)}
             </Text>
 
             <Text style={styles.expenseProperty}>DATA</Text>
-            <Text style={styles.expenseValue}>17/08/2020</Text>
+            <Text style={styles.expenseValue}>{expense.date}</Text>
 
             <Text style={styles.expenseProperty}>OBSERVAÇÃO</Text>
-            <Text style={styles.expenseValue}>.........</Text>
+            <Text style={styles.expenseValue}>{expense.additionalInfo}</Text>
 
             <TouchableOpacity
               style={styles.detailsButton}
-              onPress={navigateToEditDetail}>
+              onPress={navigateToEditDetail(expense)}>
               <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
               <Icon name="arrow-right" size={18} color="#9acd32" />
             </TouchableOpacity>

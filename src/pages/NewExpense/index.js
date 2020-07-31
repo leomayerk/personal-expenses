@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -13,27 +13,58 @@ import {
   SafeAreaView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { format } from "date-fns";
+import {format} from 'date-fns';
+import {useDispatch} from 'react-redux';
 
+import {newExpense} from '../../store/fetchActions';
 import styles from './styles';
 
 export default function NewExpense() {
   const navigation = useNavigation(null);
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth);
 
-  const [datePressed, setDatePressed] = useState(false);
+  const [item, setItem] = useState('');
+  const [value, setValue] = useState('');
   const [date, setDate] = useState(new Date());
+  const [info, setInfo] = useState('');
+  const [datePressed, setDatePressed] = useState(false);
 
-  const formattedDate = format(date, "dd/MM/yyyy");
+  const formattedDate = format(date, 'dd/MM/yyyy');
 
   const assignDate = (event, selectedDate) => {
-    setDatePressed(false)
+    setDatePressed(false);
     const currentDate = selectedDate || date;
     setDate(currentDate);
     console.log(currentDate);
-  }
+  };
 
   function navigateToBack() {
     navigation.goBack();
+  }
+
+  function submit(item, value, date, info) {
+    if (item == '' || value == '' || date == '') {
+      Alert.alert(
+        'Ops!',
+        'Os campos Item, Valor e Data são obrigatórios',
+        [
+          {
+            text: 'Ok, vou informar esses campos!',
+            onPress: () => console.log('Ok pressed'),
+            style: 'cancel',
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      try {
+        dispatch(newExpense(item, value, date, info, token));
+        navigation.navigate('Home');
+      } catch (err) {
+        alert('Erro ao cadastrar aula, tente novamente!');
+      }
+    }
   }
 
   return (
@@ -62,12 +93,14 @@ export default function NewExpense() {
               <TextInput
                 style={styles.expenseValue}
                 placeholder="Item"
+                onChangeText={(item) => setItem(item)}
                 placeholderTextColor={'#737380'}></TextInput>
 
               <Text style={styles.expenseProperty}>VALOR</Text>
               <TextInput
                 style={styles.expenseValue}
                 placeholder="Valor"
+                onChangeText={(value) => setValue(value)}
                 placeholderTextColor={'#737380'}></TextInput>
 
               <Text style={styles.expenseProperty}>DATA</Text>
@@ -75,8 +108,13 @@ export default function NewExpense() {
                 <TextInput
                   style={styles.expenseValue}
                   placeholder="Selecione uma data"
-                  placeholderTextColor={'#737380'}>{formattedDate}</TextInput>
-                <TouchableOpacity style={styles.calendarButton} onPress={datePressed => setDatePressed(true)}>
+                  onChangeText={(date) => setDate(date)}
+                  placeholderTextColor={'#737380'}>
+                  {formattedDate}
+                </TextInput>
+                <TouchableOpacity
+                  style={styles.calendarButton}
+                  onPress={(datePressed) => setDatePressed(true)}>
                   <Icon name="calendar-plus-o" size={20} color="#fff" />
                 </TouchableOpacity>
 
@@ -96,10 +134,13 @@ export default function NewExpense() {
                 style={styles.expenseValue}
                 placeholder="Informação adicional"
                 multiline={true}
+                onChangeText={(info) => setInfo(info)}
                 placeholderTextColor={'#737380'}></TextInput>
             </View>
           </View>
-          <TouchableOpacity style={styles.createButton}>
+          <TouchableOpacity
+            style={styles.createButton}
+            onPress={() => submit(item, value, date, info)}>
             <Icon name="check" size={20} color="#222222" />
             <Text style={styles.createText}>Confirmar Despesa</Text>
           </TouchableOpacity>

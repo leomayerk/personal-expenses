@@ -12,16 +12,7 @@ export default StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center'
-	},
-
-	totalText: {
-		fontSize: 15,
-		color: '#FFF',
-	},
-
-    headerTextBold: {
-			fontWeight:'bold'
-	},
+  },
 
 	title: {
 		fontSize: 30,

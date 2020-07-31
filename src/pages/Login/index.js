@@ -13,7 +13,6 @@ import {useNavigation} from '@react-navigation/native';
 import styles from './styles';
 import logoImg from '../../assets/sofit-logo.png';
 import {authLogin} from '../../store/fetchActions';
-import {logout, login} from '../../store/ducks/auth';
 
 export default function Login() {
   const navigation = useNavigation();
