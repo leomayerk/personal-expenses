@@ -1,10 +1,10 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
-    backgroundColor: '#404040'
+    backgroundColor: '#404040',
   },
 
   horizontalPadding: {
@@ -18,30 +18,42 @@ export default StyleSheet.create({
     height: 50,
   },
 
+  headerTouchable: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  headerText: {
+    fontSize: 22,
+    color: '#9acd32',
+    fontWeight: 'bold',
+    marginLeft: 12
+  },
+
   expense: {
-		padding:24,
-		borderRadius:8,
+    padding: 24,
+    borderRadius: 8,
     backgroundColor: '#222222',
     marginBottom: 106,
     marginTop: 20,
   },
 
-  expenseHeader:{
+  expenseHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
 
   iconExpenseHeader: {
-    marginEnd: '55%'
+    marginEnd: '55%',
   },
 
-  expenseTitle:{
+  expenseTitle: {
     fontSize: 26,
     color: '#9acd32',
     fontWeight: 'bold',
     flexDirection: 'row',
-    marginBottom:8
+    marginBottom: 8,
   },
 
   expenseProperty: {
@@ -64,7 +76,7 @@ export default StyleSheet.create({
   },
 
   calendarButton: {
-    marginEnd: '35%'
+    marginEnd: '35%',
   },
 
   deleteButton: {
@@ -82,6 +94,5 @@ export default StyleSheet.create({
     marginLeft: 6,
     marginRight: 6,
     marginTop: 3,
-  }
-
+  },
 });

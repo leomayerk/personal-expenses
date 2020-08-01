@@ -25,11 +25,13 @@ export default function EditDetail() {
   const expense = route.params.expense;
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth);
+  const expenseDate = new Date(expense.date);
+
 
   const [item, setItem] = useState(expense.item);
   const [value, setValue] = useState(expense.value);
-  const [date, setDate] = useState(parseISO(expense.date));
-  const [info, setInfo] = useState(expense.additionalInfo);
+  const [date, setDate] = useState(expenseDate);
+  const [info, setInfo] = useState(expense.additionalInfo.info);
   const [datePressed, setDatePressed] = useState(false);
   const [updated, setUpdated] = useState(false);
 
@@ -37,7 +39,6 @@ export default function EditDetail() {
     setDatePressed(false);
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    console.log(currentDate);
   };
 
   function navigateToBack() {
@@ -45,14 +46,16 @@ export default function EditDetail() {
   }
 
   useEffect(() => {
+    console.log(new Date(expense.date).getTime(),  new Date(date).getTime())
     if (
-      expense.date !== date ||
+      new Date(expense.date).getTime() !== new Date(date).getTime()||
       expense.value !== value ||
       expense.item !== item ||
-      expense.additionalInfo !== info
+      expense.additionalInfo.info !== info
     ) {
       setUpdated(true);
     }
+
   }, [item, value, date, info]);
 
   function confirmDelete(id) {
@@ -135,8 +138,11 @@ export default function EditDetail() {
               </TouchableOpacity>
             )}
             {updated && (
-              <TouchableOpacity onPress={() => confirmUpdate(expense._id)}>
-                <Icon name="floppy-o" size={22} color="#9acd32" />
+              <TouchableOpacity
+                style={styles.headerTouchable}
+                onPress={() => confirmUpdate(expense._id)}>
+                <Icon name="arrow-left" size={22} color="#9acd32" />
+                <Text style={styles.headerText}>Salvar</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -208,7 +214,7 @@ export default function EditDetail() {
                 multiline={true}
                 placeholderTextColor={'#737380'}
                 onChangeText={(info) => setInfo(info)}>
-                {expense.info}
+                {expense.additionalInfo.info}
               </TextInput>
             </View>
           </View>

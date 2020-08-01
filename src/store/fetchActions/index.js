@@ -88,7 +88,7 @@ export const editExpense = (id, date, item, value, info, token) => {
           date: date,
           item: item,
           value: value,
-          additionalInfo: info,
+          additionalInfo: {info},
         },
         {
           headers: {

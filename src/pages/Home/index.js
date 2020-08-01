@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {format, parseISO} from 'date-fns';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 import styles from './styles';
 import {allExpenses} from '../../store/fetchActions';
@@ -48,6 +50,10 @@ export default function Home() {
     setLoading(false);
   }
 
+  function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -81,13 +87,13 @@ export default function Home() {
             </Text>
 
             <Text style={styles.expenseProperty}>DATA</Text>
-            {console.log(
-              expenses.date,
-              parseISO(expenses.date),
-              String(format(parseISO(expenses.date), 'dd/MM/yyyy')),
-            )}
             <Text style={styles.expenseValue}>
-              {format(parseISO(expenses.date), 'dd/MM/yyyy')}
+              {capitalize(
+                moment(expenses.date).locale('pt-br').format('dddd, DD [de] '),
+              )}
+              {capitalize(
+                moment(expenses.date).locale('pt-br').format('MMMM [de] YYYY'),
+              )}
             </Text>
 
             {expenses.additionalInfo != undefined && (
@@ -99,7 +105,8 @@ export default function Home() {
               </>
             )}
 
-            <TouchableOpacity style={styles.detailsButton}
+            <TouchableOpacity
+              style={styles.detailsButton}
               onPress={() => navigateToEditDetail(expenses)}>
               <Text style={styles.detailsButtonText}>Ver mais detalhes</Text>
               <Icon name="arrow-right" size={18} color="#9acd32" />
