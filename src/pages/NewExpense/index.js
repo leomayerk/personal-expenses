@@ -13,8 +13,8 @@ import {
   SafeAreaView,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {format} from 'date-fns';
-import {useDispatch} from 'react-redux';
+import {format, parseISO} from 'date-fns';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {newExpense} from '../../store/fetchActions';
 import styles from './styles';
@@ -31,16 +31,20 @@ export default function NewExpense() {
   const [datePressed, setDatePressed] = useState(false);
 
   const formattedDate = format(date, 'dd/MM/yyyy');
+  const formattedDateToSend = format(date, 'yyyy/MM/dd');
 
   const assignDate = (event, selectedDate) => {
     setDatePressed(false);
     const currentDate = selectedDate || date;
     setDate(currentDate);
-    console.log(currentDate);
   };
 
-  function navigateToBack() {
-    navigation.goBack();
+  // function navigateToBack() {
+  //   navigation.goBack();
+  // }
+
+  function navigateToHome() {
+    navigation.navigate('Home');
   }
 
   function submit(item, value, date, info) {
@@ -78,7 +82,7 @@ export default function NewExpense() {
         <View style={styles.horizontalPadding}>
           <StatusBar barStyle="dark-content" />
           <View style={styles.header}>
-            <TouchableOpacity onPress={navigateToBack}>
+            <TouchableOpacity onPress={() => navigateToHome()}>
               <Icon name="arrow-left" size={22} color="#9acd32" />
             </TouchableOpacity>
           </View>
@@ -101,6 +105,8 @@ export default function NewExpense() {
                 style={styles.expenseValue}
                 placeholder="Valor"
                 onChangeText={(value) => setValue(value)}
+                autoCompleteType="cc-number"
+                keyboardType="decimal-pad"
                 placeholderTextColor={'#737380'}></TextInput>
 
               <Text style={styles.expenseProperty}>DATA</Text>
@@ -140,7 +146,7 @@ export default function NewExpense() {
           </View>
           <TouchableOpacity
             style={styles.createButton}
-            onPress={() => submit(item, value, date, info)}>
+            onPress={() => submit(item, value, formattedDateToSend, info)}>
             <Icon name="check" size={20} color="#222222" />
             <Text style={styles.createText}>Confirmar Despesa</Text>
           </TouchableOpacity>

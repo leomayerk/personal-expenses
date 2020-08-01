@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Alert,
@@ -13,28 +13,25 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {format} from 'date-fns';
-import {useDispatch} from 'react-redux';
+import {format, parseISO} from 'date-fns';
+import {useDispatch, useSelector} from 'react-redux';
 
 import {deleteExpense, editExpense} from '../../store/fetchActions';
 import styles from './styles';
 
 export default function EditDetail() {
   const navigation = useNavigation(null);
-  const route = useRoute();
+  const route = useRoute(); // const navigation = useNavigation(null);
   const expense = route.params.expense;
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth);
 
   const [item, setItem] = useState(expense.item);
   const [value, setValue] = useState(expense.value);
-  const [date, setDate] = useState(expenseDate);
+  const [date, setDate] = useState(parseISO(expense.date));
   const [info, setInfo] = useState(expense.additionalInfo);
   const [datePressed, setDatePressed] = useState(false);
   const [updated, setUpdated] = useState(false);
-
-  const formattedDate = format(date, 'dd/MM/yyyy');
-  const expenseDate = new Date(expense.date);
 
   const assignDate = (event, selectedDate) => {
     setDatePressed(false);
@@ -172,6 +169,8 @@ export default function EditDetail() {
                 style={styles.expenseValue}
                 placeholder="Valor"
                 placeholderTextColor={'#737380'}
+                autoCompleteType="cc-number"
+                keyboardType="decimal-pad"
                 onChangeText={(value) => setValue(value)}>
                 {expense.value}
               </TextInput>
@@ -183,11 +182,11 @@ export default function EditDetail() {
                   placeholder="Selecione uma data"
                   placeholderTextColor={'#737380'}
                   onChangeText={(date) => setDate(date)}>
-                  {formattedDate}
+                  {format(date, 'dd/MM/yyyy')}
                 </TextInput>
                 <TouchableOpacity
                   style={styles.calendarButton}
-                  onPress={setDatePressed(true)}>
+                  onPress={() => setDatePressed(true)}>
                   <Icon name="calendar-plus-o" size={20} color="#fff" />
                 </TouchableOpacity>
 
@@ -209,7 +208,7 @@ export default function EditDetail() {
                 multiline={true}
                 placeholderTextColor={'#737380'}
                 onChangeText={(info) => setInfo(info)}>
-                {expense.additionalInfo}
+                {expense.info}
               </TextInput>
             </View>
           </View>

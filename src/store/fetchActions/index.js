@@ -1,7 +1,12 @@
 import {showMessage} from 'react-native-flash-message';
 
 import api from '../../services/api';
-import {addExpenses, addExpense, removeExpense, updateExpense} from '../ducks/expenses';
+import {
+  addExpenses,
+  addExpense,
+  removeExpense,
+  updateExpense,
+} from '../ducks/expenses';
 import {login} from '../ducks/auth';
 
 // Expenses List
@@ -11,7 +16,7 @@ export const allExpenses = (page, token) => {
       .get('/expenses', {
         params: {
           page: page,
-          perPage: 15,
+          perPage: 20,
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -47,7 +52,7 @@ export const newExpense = (item, value, date, info, token) => {
           date: date,
           item: item,
           value: value,
-          additionalInfo: info,
+          additionalInfo: {info},
         },
         {
           headers: {

@@ -55,7 +55,6 @@ export default function Login() {
           placeholder="E-mail"
           onChangeText={(email) => setEmail(email)}
           ref={input => { this.textInput = input }}
-          // ref={(input) => setEmail(input)}
         />
 
         <TouchableOpacity style={styles.button} onPress={() => Logon()}>
