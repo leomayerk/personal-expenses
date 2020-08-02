@@ -7,7 +7,7 @@ import {
   removeExpense,
   updateExpense,
 } from '../ducks/expenses';
-import {login} from '../ducks/auth';
+import {login, logout} from '../ducks/auth';
 
 // Expenses List
 export const allExpenses = (page, token) => {
@@ -167,5 +167,17 @@ export const authLogin = (email) => {
           type: 'danger',
         });
       });
+  };
+};
+
+// Logout
+export const authLogout = () => {
+  return (dispatch) => {
+    dispatch(logout());
+    showMessage({
+      message: `Até logo :)`,
+      description: 'Logout realizado com sucesso',
+      type: 'info',
+    });
   };
 };

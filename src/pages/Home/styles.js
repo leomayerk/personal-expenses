@@ -14,11 +14,36 @@ export default StyleSheet.create({
 		alignItems: 'center'
   },
 
+  logout: {
+    alignItems:'center',
+    justifyContent:'center',
+    flexDirection: 'row',
+    marginBottom: 60,
+    marginStart:-300
+  },
+
+  logoutText:{
+    marginLeft: 6,
+    marginRight: 6,
+    color: '#ca3433',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
 	title: {
 		fontSize: 30,
-		marginBottom: 16,
+		marginTop: 22,
 		color: '#9acd32',
 		fontWeight: 'bold',
+  },
+
+  listText: {
+		fontSize: 20,
+		color: '#9acd32',
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center'
 	},
 
 	expenseList:{
@@ -76,5 +101,36 @@ export default StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+
+  notExpenses: {
+		textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 220
+  },
+
+  notExpensesTitle: {
+		flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+		color: '#222222',
+    fontWeight: 'bold',
+    marginBottom: 30
+  },
+
+  notExpensesText: {
+		fontSize: 60,
+		color: '#222222',
+    fontWeight: 'bold',
+    marginLeft: 12
+  },
+
+  notExpensesSub: {
+		fontSize: 32,
+		color: '#222222',
+    fontWeight: 'bold',
+    textAlign:'center'
+  },
+
 
 });

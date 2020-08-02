@@ -8,12 +8,11 @@ import {
   ScrollView,
   StatusBar,
   TextInput,
-  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {format, parseISO} from 'date-fns';
+import {format} from 'date-fns';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {deleteExpense, editExpense} from '../../store/fetchActions';
@@ -21,7 +20,7 @@ import styles from './styles';
 
 export default function EditDetail() {
   const navigation = useNavigation(null);
-  const route = useRoute(); // const navigation = useNavigation(null);
+  const route = useRoute();
   const expense = route.params.expense;
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth);
@@ -46,7 +45,6 @@ export default function EditDetail() {
   }
 
   useEffect(() => {
-    console.log(new Date(expense.date).getTime(),  new Date(date).getTime())
     if (
       new Date(expense.date).getTime() !== new Date(date).getTime()||
       expense.value !== value ||

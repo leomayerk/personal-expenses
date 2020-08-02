@@ -19,9 +19,11 @@ export default function Login() {
   const dispatch = useDispatch();
   const token = useSelector((state) => state.auth);
   const [email, setEmail] = useState('');
+  const [lastToken, setLastToken] = useState('');
 
-  function Logon() {
-    dispatch(authLogin({email}));
+  async function Logon() {
+    setLastToken(token);
+    await dispatch(authLogin({email}));
   }
 
   useEffect(() => {
@@ -30,10 +32,14 @@ export default function Login() {
       navigation.navigate('Home');
     }
 
+    // if (lastToken == token && token != undefined && token != '') {
+    //   this.textInput.clear();
+    //   navigation.navigate('Home');
+    // }
+
     return () => {
       this.textInput.clear()
       setEmail('');
-      console.log(token);
     };
   }, [token]);
 
