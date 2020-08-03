@@ -7,6 +7,11 @@ This application is based on react-native and redux.
 
 To use the app, it's necessary to have an emulator installed on your computer and configure react-native dependencies.
 
+First:
+
+```bash
+npm install
+```
 To Android emulator:
 
 ```bash
